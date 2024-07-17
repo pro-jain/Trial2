@@ -1,0 +1,255 @@
+<html>
+    <head>
+        <title>Home page</title>
+    </head>
+    <style>
+        
+        .tooltip {
+  position: relative;
+  display: inline-block;
+  }
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}#search{
+           margin-top:2px;
+            margin-left:5px;
+            border-radius:9px;
+            width:56px;
+            height:30px;
+            
+        }
+        #search:hover{
+            width:50%;
+        }
+        .circle1{
+            height:100px;
+            width:100px;
+            border-radius:50%;
+            display:inline-block;
+            border-style: solid;
+    border-width: 2px;
+    border-color: rgb(185, 30, 167);
+    margin-left:50px;
+        }
+        .circle_img{
+            height:90px;
+            width:90px;
+            border-radius:50%;
+            margin: 4px 4px 1px 5px;
+        }
+        .circle1:hover img{
+            transform: scale(1.1);
+        }
+        .text{
+            margin-left: 35%;
+            margin-top:7%
+        }
+        #dot{
+            width:25px;
+            height:25px;
+            border-radius:50%;
+            background-color:red;
+            position:absolute;
+            margin-left:1250px;
+            margin-top:-65px;
+            z-index:1;
+            
+        }
+        #unread{
+            width:25px;
+            height:25px;
+            margin-left:1326px;
+            margin-top:-51px;
+        }
+        #dot:hover{
+            visibility:hidden;
+        }
+
+        #plus{
+            position:absolute;
+            margin-top:50px;
+            margin-left:50px;
+        }
+        .popup{
+position:fixed;
+background-color: rgba(0, 0, 0, 0.75);
+height:100%;
+width:100%;
+margin-top:-18%;
+z-index:1;
+overflow:auto;
+}
+.close{
+    position:absolute;
+font-size:50px;
+font-weight:bold;
+color:white;
+cursor:pointer;
+overflow:auto; 
+margin-left:85%;  
+size:cover;
+}
+body{
+    height:100vh;
+    width:100%;
+}
+.logo img{
+    width:200px;
+    border-radius:20px;
+}
+#arrow{
+    position:fixed;
+    top:20;
+    width:100px;
+    height:100px;
+    cursor:pointer;
+    z-index:1;
+}
+.sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:240px;
+    height:50%;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    background:rgba(105, 99, 99, 0.3);
+    backdrop-filter:blur(17px);
+   border-right:1px solid rgba(105, 99, 99, 0.3);
+   align-items: center;
+   flex-direction: column;
+   border-radius:30px;
+}
+#arrow:hover{
+    display:block;
+}
+.img{
+    margin:auto;
+    display:block;
+    width:80%;
+   max-width:700px;
+   overflow:auto;
+}
+.links li:hover{
+    background:rgb(168, 220, 37);
+    border-radius:15px;
+}
+.sidebar .links{
+    list-style:none;
+    margin-top:30px;
+
+}
+.links li{
+    display:flex;
+    align-items:center;
+}
+.links li a{
+    color:rgb(10, 91, 65);
+    padding:10px;
+    font-weight:500;
+    white-space:nowrap;
+    text-decoration:none;
+    font-size:0.8cm;
+}
+    #c{
+        height:90px;
+            width:90px;
+            border-radius:50%;
+            display:inline-block;
+            border-style: dashed;
+    border-width: 2px;
+    border-color: black;
+    background-color: white;}
+    #img{ 
+        height:90px;
+            width:90px;
+            border-radius:50%;
+float :left;
+    }
+    .sidebar.active {
+    transform: translateX(0);
+}
+
+    .post{
+        border:2px solid black;
+        margin-top:2.5%;
+        margin-left:35%;
+        width:33%;
+    height:70%;
+    border-radius:40px;
+    }
+    .video{
+        border-radius:39px;
+        overflow:hidden;
+    }
+    </style>
+
+    
+
+    <body>
+        <marquee style="background-color: #ea8ae2;">This WPP Mini is prepared by Bodhini Jain U23CS060</marquee>
+        <img src="https://th.bing.com/th?id=OIP.b3LgbjytOXFP_mxuD6NfjgHaHv&w=244&h=255&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2" style="height:35px; margin-left:400px; float:left;">
+        <form>
+            <input id="search" type="text-area" placeholder="Search..."> <br> </form><p><img src="insta.png" style="width:250px; margin-top:50px; height:70px;">
+                <img src="https://i.pinimg.com/originals/8f/8f/b4/8f8fb43ce828a22c91c0b59f55fb91b3.png"  style="width:70px; height:70px;">
+                <a href="file:///C:/Users/Hp/OneDrive/Documents/OneDrive/Documents/Sem%202/WPP/instagram/Notifiactions.html"><img src="heart.png" style="width:80px; height:80px; margin-left:60%; z-index:2;"></a><a href ="file:///C:/Users/Hp/OneDrive/Documents/OneDrive/Documents/Sem%202/WPP/instagram/Messages.html"><img src="https://cdn-icons-png.flaticon.com/512/5728/5728145.png" style="width:70px; height:70px;"></a><img src="unread.png" id="unread"><div id="dot"></div><div id="c" style="text-align:center; float:left; position: relative; text-align: center; color: black"><img src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg" id="img"><div id="plus"><img src="plus_icon.png" style="width:50px; height:50px;" ></div></div><span class="circle1"><img src="https://resize.indiatvnews.com/en/resize/newbucket/1200_-/2022/06/pjimage-75-1655299808.jpg" class="circle_img" id="myimg"><div class="text">Daya </div><a href=""></a></span><span class="circle1"><img src="https://d3pc1xvrcw35tl.cloudfront.net/images/864x864/11821110-1658314901122412-1508422268-n_202112745641.jpg" class="circle_img"><div class="text">Komal </div></span><span class="circle1"><img src="https://www.koimoi.com/wp-content/new-galleries/2021/07/taarak-mehta-ka-ooltah-chashmah-helped-army-wives-to-come-out-of-depression-reveals-sonalika-joshi-aka-madhavi-bhide-read-on-001.jpg" class="circle_img"><div class="text">Madhvi </div></span><span class="circle1"><img src="https://feeds.abplive.com/onecms/images/uploaded-images/2023/01/18/6c00530d596df9dd8457b152103d57771674034935181454_original.jpg?impolicy=abp_cdn&imwidth=720" class="circle_img"><div class="text">Babita</div></span><span class="circle1"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Jennifer_mistry.jpg" class="circle_img"><div class="text">Roshan </div></span><span class="circle1"><img src="https://static.toiimg.com/thumb/msid-78363781,width-1280,height-720,resizemode-4/78363781.jpg" class="circle_img"><div class="text">Anjali </div></span><span class="circle1"><img src="https://www.informalnewz.com/wp-content/uploads/2023/01/TMKOC-Taarak-Mehtas-%E2%80%98Sonu-see-here.jpg" class="circle_img"><div class="text">Sonu </div></span><div class="popup" id="modal"> <span class="close">&times;</span><img src="https://th.bing.com/th/id/OIP._Z_8kXodtp5GKtGbi8G1CQHaLH?rs=1&pid=ImgDetMain" class="img" id="content"></div>
+            <div class="post"><img src="https://cdn.statically.io/img/haleyblackall.com/wp-content/uploads/2021/08/Instagram-nature-captions-Nature-quotes-for-Instgram-1-8.jpg?quality=80&f=auto" style="width:100%; height:85%; border-radius:39px;">
+            <div class="tooltip"><img src="heart.png" id="heartImage" style="width:80px; height:80px; margin-top:-0.9%;">
+    <span class="tooltiptext">Like</span>
+  </div><div class="tooltip"><a href="file:///C:/Users/Hp/OneDrive/Documents/OneDrive/Documents/Sem%202/WPP/instagram/comments.html"><img src="message_icon.png" style="width:65px; height:65px; margin-bottom:7px; "></a>
+  <span class="tooltiptext">Comment</span>
+</div><div class="tooltip"><img src="https://cdn-icons-png.flaticon.com/512/5728/5728145.png" style="width:60px; height:60px; margin-bottom:7px; margin-left:10px">
+    <span class="tooltiptext">Share</span></div>
+  </div><div class="post"><video class="video" width="100%" height="85%" controls><source src="Little Things That Matter _ 1 Minute Nature Video.mp4" type="video/mp4"></video>
+    <div class="tooltip"><img src="heart.png" id="heartImage2" style="width:80px; height:80px; margin-top:-0.9%;">
+    <span class="tooltiptext">Like</span>
+  </div><div class="tooltip"><a href="file:///C:/Users/Hp/OneDrive/Documents/OneDrive/Documents/Sem%202/WPP/instagram/comments.html"><img src="message_icon.png" style="width:65px; height:65px; margin-bottom:7px; "></a>
+  <span class="tooltiptext">Comment</span>
+</div><div class="tooltip"><img src="https://cdn-icons-png.flaticon.com/512/5728/5728145.png" style="width:60px; height:60px; margin-bottom:7px; margin-left:10px">
+    <span class="tooltiptext">Share</span>
+  </div>
+</div>
+<img src="Hand-drawn-arrow-symbol.png" id="arrow" onclick="toggleSidebar()">
+<aside class="sidebar">
+    <div class="logo">
+        <img src="insta.png">
+    </div>
+        <ul class="links">
+            <li><a href="profile.html">Your Profile</a></li>
+            <li><a href="file:///C:/Users/Hp/OneDrive/Documents/OneDrive/Documents/Sem%202/WPP/instagram/Messages.html">Messages</a></li>
+            <li><a href="Notifiactions.html">Notifications</a></li>
+            <li onclick="confirmLogout()"><a href="#">Logout</a></li>
+        </ul>
+
+</aside>
+            <script>
+            
+                 var modal=document.getElementById("modal");var image =document.getElementById("myimg");var con=document.getElementById("content");var circles = document.querySelectorAll('.circle_img');modal.style.display="none";circles.forEach(function(circle) {circle.addEventListener('click', function() {modal.style.display = "block";content.src = circle.src;});}); var span = document.getElementsByClassName("close")[0]; span.onclick = function() {modal.style.display = "none";};var heartImage = document.getElementById("heartImage");heartImage.addEventListener("dblclick", function() {heartImage.src = "redheart.png";});var heartImage2 = document.getElementById("heartImage2");heartImage2.addEventListener("dblclick", function() {heartImage2.src = "redheart.png";});
+        function toggleSidebar() {
+        var sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('active');
+    }
+    function confirmLogout() {
+        var confirmLogout = confirm("Are you sure you want to logout?");
+        if (confirmLogout) {
+            window.location.href ="Start_from_here.html";
+        }
+    }
+
+            </script> 
+    </body>
+
+    </html>
