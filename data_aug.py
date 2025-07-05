@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import math
 import cv2
 import matplotlib.pyplot as plt
 import sys
@@ -851,3 +852,72 @@ class Sequence(object):
             if random.random() < prob:
                 images, bboxes = augmentation(images, bboxes)
         return images, bboxes
+    
+class Perspective(object):
+    def __init__(self,img,bboxes, rotx=0, roty=0, rotz=0, f=2.0):
+        self.img=img
+        self.rotx=rotx
+        self.roty=roty
+        self.rotz=rotz
+        self.f=f
+        self.bboxes=bboxes
+
+    def __call__(self,img, bboxes,rotx=0, roty=0, rotz=0, f=2.0):
+        
+        h, w = img.shape[:2]
+        cx, cy = w / 2, h / 2
+        bbox_corners = [
+    (bboxes[1],bboxes[2]),  # top-left
+    (bboxes[3],bboxes[2]),  # top-right
+    (bboxes[3], bboxes[4]),  # bottom-right
+    (bboxes[1], bboxes[4])   # bottom-left
+]
+
+        rotx = math.radians(rotx)
+        roty = math.radians(roty)
+        rotz = math.radians(rotz)
+        
+        cosx, sinx = math.cos(rotx), math.sin(rotx)
+        cosy, siny = math.cos(roty), math.sin(roty)
+        cosz, sinz = math.cos(rotz), math.sin(rotz)
+        
+        roto = np.array([
+            [cosz * cosy, cosz * siny * sinx - sinz * cosx],
+            [sinz * cosy, sinz * siny * sinx + cosz * cosx],
+            [-siny,       cosy * sinx]
+        ])
+       
+        corners = np.array([
+            [-cx, -cy],
+            [ cx, -cy],
+            [ cx,  cy],
+            [-cx,  cy]
+        ])
+
+        projected = []
+        for pt in corners:
+            x, y = pt
+            z = x * roto[2, 0] + y * roto[2, 1]
+            denom = f * h + z
+            px = cx + (x * roto[0, 0] + y * roto[0, 1]) * f * h / denom
+            py = cy + (x * roto[1, 0] + y * roto[1, 1]) * f * h / denom
+            projected.append([px, py])
+        
+        projected2 = []
+        for pt in bbox_corners:
+            x, y = pt
+            z = x * roto[2, 0] + y * roto[2, 1]
+            denom = f * h + z
+            px = cx + (x * roto[0, 0] + y * roto[0, 1]) * f * h / denom
+            py = cy + (x * roto[1, 0] + y * roto[1, 1]) * f * h / denom
+            projected2.append([px, py])
+
+        src_pts = np.array([[0, 0], [w, 0], [w, h], [0, h]], dtype=np.float32)
+        dst_pts = np.array(projected, dtype=np.float32)
+        src_pts = np.array([[0, 0], [, 0], [w, h], [0, h]], dtype=np.float32)
+        dst_pts = np.array(projected2, dtype=np.float32)
+
+        H = cv2.getPerspectiveTransform(src_pts, dst_pts)
+        img = cv2.warpPerspective(img, H, (w, h))
+
+        return img,bboxes
