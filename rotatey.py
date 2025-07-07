@@ -3,49 +3,8 @@ import numpy as np
 import math
 from data_aug.data_aug import *
 from data_aug.bbox_util import *
+import matplotlib.pyplot as plt
 
-def rotate_image_3d(img, rotx=0, roty=0, rotz=0, f=2.0):
-    h, w = img.shape[:2]
-    cx, cy = w / 2, h / 2
-
-    # Convert degrees to radians
-    rotx = math.radians(rotx)
-    roty = math.radians(roty)
-    rotz = math.radians(rotz)
-
-    cosx, sinx = math.cos(rotx), math.sin(rotx)
-    cosy, siny = math.cos(roty), math.sin(roty)
-    cosz, sinz = math.cos(rotz), math.sin(rotz)
-
-    roto = np.array([
-        [cosz * cosy, cosz * siny * sinx - sinz * cosx],
-        [sinz * cosy, sinz * siny * sinx + cosz * cosx],
-        [-siny,       cosy * sinx]
-    ])
-
-    corners = np.array([
-        [-cx, -cy],
-        [ cx, -cy],
-        [ cx,  cy],
-        [-cx,  cy]
-    ])  # Corners according to the center of image
-
-    projected = []
-    for pt in corners:
-        x, y = pt
-        z = x * roto[2, 0] + y * roto[2, 1]
-        denom = f * h + z
-        px = cx + (x * roto[0, 0] + y * roto[0, 1]) * f * h / denom
-        py = cy + (x * roto[1, 0] + y * roto[1, 1]) * f * h / denom
-        projected.append([px, py])
-
-    src_pts = np.array([[0, 0], [w, 0], [w, h], [0, h]], dtype=np.float32)
-    dst_pts = np.array(projected, dtype=np.float32)
-
-    H = cv2.getPerspectiveTransform(src_pts, dst_pts)
-    warped = cv2.warpPerspective(img, H, (w, h))
-
-    return warped
 
 def load_yolo_annotations(txt_file, img_width, img_height):
     """
@@ -82,9 +41,8 @@ h, w = img.shape[:2]
 # Load bboxes from txt file
 bboxes = load_yolo_annotations("final\\labels\\val\\12.txt", w, h)
 # Load input image
-img = cv2.imread("dataset\\images\\cls00_312.jpg")  # Replace with your path
 
-img_, bboxes_ = Perspective(img.copy(), bboxes.copy(),rotx=50, roty=0, rotz=0, f=2)
+img_, bboxes_ = Perspective(0, 70, 0, f=2)(img.copy(), bboxes.copy())
 # Apply rotation (example: rotate 30° around Y axis)
 #rotated_img = rotate_image_3d(img, rotx=50, roty=0, rotz=0, f=2)
 new_labels = []
@@ -101,10 +59,10 @@ for b in bboxes_:
     center_x = x1 + box_w / 2
     center_y = y1 + box_h / 2
 
-    norm_x = center_x / img_width
-    norm_y = center_y / img_height
-    norm_w = box_w / img_width
-    norm_h = box_h / img_height
+    norm_x = center_x / w
+    norm_y = center_y / h
+    norm_w = box_w / w
+    norm_h = box_h / h
 
     # Round and format the line
     yolo_line = f"{class_id} {norm_x} {norm_y} {norm_w} {norm_h}"
@@ -116,7 +74,17 @@ with open("trial.txt", "w") as f:
     for line in new_labels:
         f.write(line + "\n")
 
+plotted_img = draw_rect(img_, bboxes_)
 # Show or save the result
-cv2.imshow("Rotated Image", img_)
+#cv2.imshow("Rotated Image", img_)
+cv2.imwrite("trial.jpg",plotted_img)
+plt.imshow(plotted_img)
+plt.axis("off")
+plt.show()
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+
+
+
+

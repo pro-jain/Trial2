@@ -853,29 +853,24 @@ class Sequence(object):
                 images, bboxes = augmentation(images, bboxes)
         return images, bboxes
     
+    
 class Perspective(object):
-    def __init__(self,img,bboxes, rotx=0, roty=0, rotz=0, f=2.0):
-        self.img=img
+    def __init__(self,rotx=0, roty=0, rotz=0, f=2.0):
+       
         self.rotx=rotx
         self.roty=roty
         self.rotz=rotz
         self.f=f
-        self.bboxes=bboxes
-
-    def __call__(self,img, bboxes,rotx=0, roty=0, rotz=0, f=2.0):
+       
+        
+    def __call__(self,img, bboxes):
         
         h, w = img.shape[:2]
         cx, cy = w / 2, h / 2
-        bbox_corners = [
-    (bboxes[1],bboxes[2]),  # top-left
-    (bboxes[3],bboxes[2]),  # top-right
-    (bboxes[3], bboxes[4]),  # bottom-right
-    (bboxes[1], bboxes[4])   # bottom-left
-]
-
-        rotx = math.radians(rotx)
-        roty = math.radians(roty)
-        rotz = math.radians(rotz)
+        
+        rotx = math.radians(self.rotx)
+        roty = math.radians(self.roty)
+        rotz = math.radians(self.rotz)
         
         cosx, sinx = math.cos(rotx), math.sin(rotx)
         cosy, siny = math.cos(roty), math.sin(roty)
@@ -895,29 +890,51 @@ class Perspective(object):
         ])
 
         projected = []
-        for pt in corners:
-            x, y = pt
+        for x,y in corners:
             z = x * roto[2, 0] + y * roto[2, 1]
-            denom = f * h + z
-            px = cx + (x * roto[0, 0] + y * roto[0, 1]) * f * h / denom
-            py = cy + (x * roto[1, 0] + y * roto[1, 1]) * f * h / denom
+            denom = self.f * h + z
+            px = cx + (x * roto[0, 0] + y * roto[0, 1]) * self.f * h / denom
+            py = cy + (x * roto[1, 0] + y * roto[1, 1]) * self.f * h / denom
             projected.append([px, py])
-        
-        projected2 = []
-        for pt in bbox_corners:
-            x, y = pt
-            z = x * roto[2, 0] + y * roto[2, 1]
-            denom = f * h + z
-            px = cx + (x * roto[0, 0] + y * roto[0, 1]) * f * h / denom
-            py = cy + (x * roto[1, 0] + y * roto[1, 1]) * f * h / denom
-            projected2.append([px, py])
-
         src_pts = np.array([[0, 0], [w, 0], [w, h], [0, h]], dtype=np.float32)
         dst_pts = np.array(projected, dtype=np.float32)
-        src_pts = np.array([[0, 0], [, 0], [w, h], [0, h]], dtype=np.float32)
-        dst_pts = np.array(projected2, dtype=np.float32)
-
         H = cv2.getPerspectiveTransform(src_pts, dst_pts)
-        img = cv2.warpPerspective(img, H, (w, h))
+        w_img = cv2.warpPerspective(img, H, (w, h))
 
-        return img,bboxes
+        projected2 = []
+        for box in bboxes:
+            if(len(box)>5):
+                 print(f"Skipping — no valid bounding boxes found after skipping polygons/segments.")
+            else:
+                x1, y1, x2, y2, class_id = box
+                corners = np.array([
+                    [x1, y1],
+                    [x2, y1],
+                    [x2, y2],
+                    [x1, y2]
+                ], dtype=np.float32)
+
+                corners = np.array([corners])
+                transformed = cv2.perspectiveTransform(corners, H)[0]
+
+            
+                xs = transformed[:, 0]
+                ys = transformed[:, 1]
+                new_x1, new_y1 = np.min(xs), np.min(ys)
+                new_x2, new_y2 = np.max(xs), np.max(ys)
+
+                # Clip coordinates
+                new_x1 = max(0, min(w - 1, new_x1))
+                new_y1 = max(0, min(h - 1, new_y1))
+                new_x2 = max(0, min(w - 1, new_x2))
+                new_y2 = max(0, min(h - 1, new_y2))
+
+                # Discard boxes that become too small or invalid
+                if new_x2 - new_x1 > 1 and new_y2 - new_y1 > 1:
+                    projected2.append([new_x1, new_y1, new_x2, new_y2, class_id])
+        projected2 = np.array(projected2)
+              
+        projected2[:, 4] = projected2[:, 4].astype(int)
+        
+
+        return w_img,projected2
