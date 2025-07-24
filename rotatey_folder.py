@@ -9,10 +9,10 @@ import glob
 import shutil
 
 
-input_image_dir = "valid\\images"
-input_label_dir = "valid\\labels"
-output_image_dir = "final\\trial\\rotated\\"
-output_label_dir = "final\\trial_label\\rotated\\"
+input_image_dir = "valid"
+input_label_dir = "valid"
+output_image_dir = "valid\\rotated\\"
+output_label_dir = "valid\\rotated1\\"
 
 os.makedirs(output_image_dir, exist_ok=True)
 os.makedirs(output_label_dir, exist_ok=True)
@@ -68,16 +68,12 @@ for image_path in image_files:
         h, w = img.shape[:2]
         label_path = os.path.join(input_label_dir, f"{base_name}.txt")
         bboxes = load_yolo_annotations(label_path, w, h)
-        img_, bboxes_ = Perspective(0, 110, 0, f=2)(img.copy(), bboxes.copy())
+        img_, bboxes_ = Perspective(1,35, 0, f=2)(img.copy(), bboxes.copy())
         
         new_labels = []
 
         bboxes = load_yolo_annotations(label_path, w, h)
-        if len(bboxes) == 0:
-            print(f"Skipping {base_name} no valid bounding boxes found after skipping polygons/segments.")
-            failed_count += 1
-            continue
-
+        
         for b in bboxes_:
             x1, y1, x2, y2, class_id = b
             class_id = int(class_id)
@@ -98,13 +94,13 @@ for image_path in image_files:
             # Round and format the line
             yolo_line = f"{class_id} {norm_x} {norm_y} {norm_w} {norm_h}"
             new_labels.append(yolo_line)
-            output_label_path = os.path.join(output_label_dir, f"{base_name}_skew2.txt")
+            output_label_path = os.path.join(output_label_dir, f"{base_name}_skew1.txt")
 
         with open(output_label_path, "w") as f:
                     for line in new_labels:
                         f.write(line + "\n")
-        output_image_path = os.path.join(output_image_dir, f"{base_name}_skew2.jpg")
-
+        output_image_path = os.path.join(output_image_dir, f"{base_name}_skew1.jpg")
+        img_=cv2.cvtColor(img_,cv2.COLOR_BGR2RGB)
         plotted_img = draw_rect(img_, bboxes_)
         cv2.imwrite(output_image_path,plotted_img)
         successful_count += 1

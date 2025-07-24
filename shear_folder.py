@@ -8,10 +8,10 @@ import glob
 import shutil
 
 
-input_image_dir = "final\\trial\\vegetation"
-input_label_dir = "final\\trial_label\\veg_label"
-output_image_dir = "final\\trial\\augmented\\"
-output_label_dir = "final\\trial_label\\augmented\\"
+input_image_dir = "valid\\"
+input_label_dir = "valid\\"
+output_image_dir = "valid\\rotated\\"
+output_label_dir = "valid\\rotated1\\"
 
 os.makedirs(output_image_dir, exist_ok=True)
 os.makedirs(output_label_dir, exist_ok=True)
@@ -72,7 +72,7 @@ for image_path in image_files:
         bboxes = load_yolo_annotations(label_path, img_width, img_height)
 
         # Apply shear
-        img_, bboxes_ = RandomShear(1)(img.copy(), bboxes.copy())
+        img_, bboxes_ = RandomShear(0.5)(img.copy(), bboxes.copy())
 
         # Prepare new YOLO-format bboxes
         new_labels = []
@@ -102,12 +102,12 @@ for image_path in image_files:
             # Round and format the line
             yolo_line = f"{class_id} {norm_x} {norm_y} {norm_w} {norm_h}"
             new_labels.append(yolo_line)
-            output_label_path = os.path.join(output_label_dir, f"{base_name}_shear.txt")
+            output_label_path = os.path.join(output_label_dir, f"{base_name}_shear1.txt")
 
         with open(output_label_path, "w") as f:
             for line in new_labels:
                 f.write(line + "\n")
-        output_image_path = os.path.join(output_image_dir, f"{base_name}_shear.jpg")
+        output_image_path = os.path.join(output_image_dir, f"{base_name}_shear1.jpg")
 
         plotted_img = draw_rect(img_, bboxes_)
         cv2.imwrite(output_image_path,plotted_img)

@@ -35,14 +35,14 @@ def load_yolo_annotations(txt_file, img_width, img_height):
     
     return np.array(bboxes)
 
-img = cv2.imread("final\\images\\val\\12.jpg")[:,:,::-1]   #opencv loads images in bgr. the [:,:,::-1] does bgr -> rgb
+img = cv2.imread("final\\final\\images\\train\\142_jpg.rf.16d6c682af57b4a5e1be7c3a80566def.jpg")[:,:,::-1]   #opencv loads images in bgr. the [:,:,::-1] does bgr -> rgb
 
 h, w = img.shape[:2]
 # Load bboxes from txt file
-bboxes = load_yolo_annotations("final\\labels\\val\\12.txt", w, h)
+bboxes = load_yolo_annotations("final\\final\\labels\\train\\142_jpg.rf.16d6c682af57b4a5e1be7c3a80566def.txt", w, h)
 # Load input image
 
-img_, bboxes_ = Perspective(0, 70, 0, f=2)(img.copy(), bboxes.copy())
+img_, bboxes_ = Perspective(0, 45, 0, f=2)(img.copy(), bboxes.copy())
 # Apply rotation (example: rotate 30° around Y axis)
 #rotated_img = rotate_image_3d(img, rotx=50, roty=0, rotz=0, f=2)
 new_labels = []
