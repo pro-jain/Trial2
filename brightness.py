@@ -4,10 +4,10 @@ import glob
 import shutil
 
 # Define input and output directories
-input_image_dir = "data\\smoke\\image"
-input_label_dir = "data\\smoke\\labels"
-output_image_dir = "data\\images\\augmented\\"
-output_label_dir = "data\\labels\\augmented\\"
+input_image_dir = "valid\\"
+input_label_dir = "valid\\"
+output_image_dir = "valid\\aug\\"
+output_label_dir = "valid\\aug1\\"
 
 os.makedirs(output_image_dir, exist_ok=True)
 os.makedirs(output_label_dir, exist_ok=True)
